@@ -7,7 +7,7 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Configure application
-app = Flask(__name__)
+app = Flask(__name__, static_url_path ='/static')
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -25,8 +25,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # MYSQL database connect
-db = mysql.connector.connect(host='192.168.3.154', user='root', passwd='1234', database='mydb')
-cursor = db.cursor(dictionary=True)
+# db = mysql.connector.connect(host='192.168.3.154', user='root', passwd='1234', database='mydb')
+# cursor = db.cursor(dictionary=True)
 
 #db 데이터 가져오기
 # cursor.fetchall() #모든 행 가져오기
@@ -39,8 +39,6 @@ cursor = db.cursor(dictionary=True)
 # Database 닫기
 # db.close()
 
-
-
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -51,11 +49,17 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    db = mysql.connector.connect(host='192.168.3.154', user='root', passwd='1234', database='mydb')
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT COUNT(fest_id) as cnt FROM festival")
+    result = cursor.fetchall()
+    cursor.execute("SELECT fest_count FROM festival")
+    img_path = cursor.fetchall()
+    db.close()
+    count = result[0]['cnt']
+    print(count)
+    return render_template("index.html", count=count)
 
-@app.route("/index", methods=["GET", "POST"])
-def index_():
-    return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -66,6 +70,8 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        db = mysql.connector.connect(host='192.168.3.154', user='root', passwd='1234', database='mydb')
+        cursor = db.cursor(dictionary=True)
         
         # Ensure username was submitted
         if not request.form.get("user_email"):
@@ -118,12 +124,19 @@ def logout():
 @app.route("/signup", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        user_email = request.form.get("user_email")
-        user_pwd = request.form.get("user_pwd")
-        try:
-            cursor.execute(f"INSERT INTO user user_email, user_pwd = '{request.form.get("user_email")}', '{request.form.get("user_email")}'")
-        except:
-            print("ERROR")
+        db = mysql.connector.connect(host='192.168.3.154', user='root', passwd='1234', database='mydb')
+        cursor = db.cursor(dictionary=True)
+        email = request.form.get("user_email")
+        pwd = request.form.get("user_pwd")
+        query = "INSERT INTO user (user_email, user_pwd) VALUES (%s, %s)"
+        values = (email, pwd)
+        # try:
+        cursor.execute(query, values)
+        db.commit()
+        cursor.close()
+        return redirect("/")
+        # except:
+        #     print("ERROR")
         
     # GET 요청인 경우에는 register.html을 렌더링합니다.
     return render_template("signup.html")

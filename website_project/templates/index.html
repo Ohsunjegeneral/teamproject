@@ -1,10 +1,12 @@
-{% extends 'layout.html' %}
-
+{% extends 'navbar.html' %}
+<link href="/static/album.css" rel="stylesheet">
 {% block main %}
 
 <main class="container">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     <!-- 카드부분 -->
+
+    {% for i in range(count) %}
     <div class="col">
       <div class="card shadow-sm">
         <img src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202301/12/020f00a0-a0d5-4c01-82e3-c7b33f06bb74.jpg" />
@@ -19,6 +21,8 @@
         </div>
       </div>
     </div>
+    {% endfor %}
+    
     <!-- 카드부분 end -->
 </main>
 
