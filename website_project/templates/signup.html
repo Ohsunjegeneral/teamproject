@@ -1,0 +1,22 @@
+{% extends 'navbar.html' %}
+
+{% block main %}
+
+  <!-- extend 후 메인만 사용 -->
+  <main class="form-signin w-100 m-auto">
+    <form action="/signup" method="post">
+      <h1 class="h3 mb-3 fw-normal">회원가입</h1>
+
+      <div class="form-floating">
+        <input type="email" class="form-control" id="user_email" name = "user_email" placeholder="name@example.com" />
+        <label for="floatingInput">ID</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control" id="user_pwd" name = "user_pwd" placeholder="Password" />
+        <label for="floatingPassword">Password</label>
+      </div>
+      <button class="btn btn-primary w-100 py-2" type="submit">회원가입</button>
+    </form>
+  </main>
+
+{% endblock %}
