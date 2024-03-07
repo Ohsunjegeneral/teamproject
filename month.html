@@ -1,0 +1,80 @@
+{% extends 'navbar.html' %}
+
+{% block head %}
+
+<style>
+  .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 50px;
+  }
+  .month-button {
+      background-color: #f0f0f0;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+  }
+  /* 각 월 별 버튼 색상 */
+  .month-button:nth-child(1) { background-color: #FFD700; } /* 1월 - 금색 */
+  .month-button:nth-child(2) { background-color: #00FFFF; } /* 2월 - 청록색 */
+  .month-button:nth-child(3) { background-color: #FFA07A; } /* 3월 - 살구색 */
+  .month-button:nth-child(4) { background-color: #7FFFD4; } /* 4월 - 옥색 */
+  .month-button:nth-child(5) { background-color: #FF6347; } /* 5월 - 토마토색 */
+  .month-button:nth-child(6) { background-color: #4682B4; } /* 6월 - 청록색 */
+  .month-button:nth-child(7) { background-color: #90EE90; } /* 7월 - 연두색 */
+  .month-button:nth-child(8) { background-color: #FF69B4; } /* 8월 - 분홍색 */
+  .month-button:nth-child(9) { background-color: #DAA520; } /* 9월 - 황금색 */
+  .month-button:nth-child(10) { background-color: #8A2BE2; } /* 10월 - 보라색 */
+  .month-button:nth-child(11) { background-color: #00CED1; } /* 11월 - 옥색 */
+  .month-button:nth-child(12) { background-color: #FF4500; } /* 12월 - 주황색 */
+</style>
+
+{% endblock %}
+
+{% block main %}
+
+<main class="container">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <form action="/month" method="post">
+        <div class="button-container">
+            <!-- 월별 버튼 -->
+            <button class="month-button" name="search_mon" value="01">1월</button>
+            <button class="month-button" name="search_mon" value="02">2월</button>
+            <button class="month-button" name="search_mon" value="03">3월</button>
+            <button class="month-button" name="search_mon" value="04">4월</button>
+            <button class="month-button" name="search_mon" value="05">5월</button>
+            <button class="month-button" name="search_mon" value="06">6월</button>
+            <button class="month-button" name="search_mon" value="07">7월</button>
+            <button class="month-button" name="search_mon" value="08">8월</button>
+            <button class="month-button" name="search_mon" value="09">9월</button>
+            <button class="month-button" name="search_mon" value="10">10월</button>
+            <button class="month-button" name="search_mon" value="11">11월</button>
+            <button class="month-button" name="search_mon" value="12">12월</button>
+        </div>
+    </form>
+    <br>
+    <!-- 카드부분 -->
+
+    {% for i in result %}
+    <div class="col">
+      <div class="card shadow-sm">
+        <img src="{{ i.fest_count }}" />
+        <div class="card-body">
+          <p class="card-text"> </p> 
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">{{ i.fest_name }} {{ i.fest_term_start }} ~ {{ i.fest_term_end }}</button>
+            </div>
+            <small class="text-body-secondary"> </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    {% endfor %}
+    
+    <!-- 카드부분 end -->
+  </main>
+{% endblock %}
